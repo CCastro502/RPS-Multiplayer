@@ -1,0 +1,94 @@
+body {
+    background-image: url("../images/background.jpg");
+    background-size: 100%;
+}
+
+#top-row {
+    padding: 0%;
+}
+
+#search {
+    background: chocolate;
+}
+
+#user-sign-in {
+    display: grid;
+    text-align: center;
+    color: white;
+}
+
+#sign-in {
+    margin: 5px;
+    border-style: groove;
+}
+
+#game-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#title {
+    font-size: 50px;
+    font-family: 'Kaushan Script', cursive;
+}
+
+#user1-img {
+}
+
+#user2-img {
+}
+
+#decision-holder {
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.col-md-2 {
+    margin: 20px;
+}
+
+.col-md-6 {
+    margin-left: 35px;
+}
+
+.button-display {
+    display: flex;
+    flex-direction: column;
+}
+
+.separate {
+    margin: 5px 0px;
+}
+
+#rock {
+    background: cadetblue;
+}
+
+#paper {
+    background: aquamarine;
+}
+
+#scissors {
+    background: aliceblue;
+}
+
+#wins-loss-tracker {
+    font-family: 'Indie Flower', cursive;
+    font-size: 21px;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-end;
+}
+
+#wins-loss-tracker2 {
+    font-family: 'Indie Flower', cursive;
+    font-size: 21px;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-start;
+    margin-left: 35px;
+}
