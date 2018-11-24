@@ -12,17 +12,17 @@ body {
     padding: 0%;
 }
 
-#search {
+.search {
     background: peru;
 }
 
-#user-sign-in {
+.user-sign-in {
     display: grid;
     text-align: center;
     color: white;
 }
 
-#sign-in {
+.sign-in {
     margin: 5px;
     border-style: groove;
 }
