@@ -4,6 +4,10 @@ body {
     letter-spacing: 150%;
 }
 
+.username {
+    padding: 40px 0px;
+}
+
 .container {
     margin-left: 10%;
 }
