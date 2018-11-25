@@ -5,7 +5,12 @@ body {
 }
 
 .username {
-    padding: 40px 0px;
+    padding: 50px 0 0 0;
+    font-family: 'Indie Flower', cursive;
+    display: flex;
+    justify-content: center;
+    margin: unset;
+
 }
 
 .container {
@@ -71,15 +76,15 @@ body {
     margin: 5px 0px;
 }
 
-#rock {
+.rock {
     background: cadetblue;
 }
 
-#paper {
+.paper {
     background: aquamarine;
 }
 
-#scissors {
+.scissors {
     background: aliceblue;
 }
 

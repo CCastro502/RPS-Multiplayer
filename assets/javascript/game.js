@@ -9,17 +9,21 @@ var config = {
 };
 firebase.initializeApp(config);
 
-
+var rockImg = $("<img>").addClass("choice").attr("src", "assets/images/rock.jpeg").attr("height", "150px").attr("width", "150px");
+var paperImg = $("<img>").addClass("choice").attr("src", "assets/images/paper.jpeg").attr("height", "150px").attr("width", "150px");
+var scissorsImg = $("<img>").addClass("choice").attr("src", "assets/images/scissors.jpeg").attr("height", "150px").attr("width", "150px");
+var imgArray = [rockImg, paperImg, scissorsImg];
+var responseArray = ["Ties with", "Cut Up", "Smashed", "Suffocated", "Is Suffocated By", "Is Smashed By", "Got Cut Up By"];
 
 // Stores username and weapon choice
 var emptyObject = {
-    user1: ["",""],
-    user2: ["",""]
+    user1: ["", ""],
+    user2: ["", ""]
 }
 
 var userObject = {
     user1: ["", ""],
-    user2:["",""]
+    user2: ["", ""]
 }
 // function clearNames () {
 //     database.ref().set({
@@ -44,8 +48,13 @@ resetValues();
 // var user1Choice = "";
 // var user2Choice = "";
 var count = 0;
+var count2 = 0;
 
 // Here will be a (series of) function(s) dedicated to taking the users username, storing it in firebase, then displaying, from firebase, that username on the page
+
+$("#send-chat").on("click", function () {
+    $("#chat-val").attr("value", $("#text-area").val())
+})
 
 $("#username1").on("click", function () {
     if ($("#sign-in1").val().length >= 3) {
@@ -77,20 +86,65 @@ $("#username2").on("click", function () {
 })
 
 database.ref().on("value", function (snapshot) {
+    count2++;
     var newObj = snapshot.val();
-    if (newObj.object.user1[0].length >= 3 && newObj.object.user2[0].length >= 3) {
+    // Signs in. Limits the startGame function starting everytime the data structure is updated
+    if (newObj.object.user1[0].length >= 3 && newObj.object.user2[0].length >= 3 && count2 <= 3) {
         $("#user-sign-in1").html("<h1 class='username'>" + newObj.object.user1[0] + "</html>")
         $("#user-sign-in2").html("<h1 class='username'>" + newObj.object.user2[0] + "</html>")
         startGame();
-    } else if (newObj.object.user1[0].length >= 3) {
+    } else if (newObj.object.user1[0].length >= 3 && count2 <= 3) {
         $("#user-sign-in1").html("<h1 class='username'>" + newObj.object.user1[0] + "</html>")
-    } else if (newObj.object.user2[0].length >= 3) {
+    } else if (newObj.object.user2[0].length >= 3 && count2 <= 3) {
         $("#user-sign-in2").html("<h1 class=''username'>" + newObj.object.user2[0] + "</html>")
+    }
+    // Displays user-choice
+    if (newObj.object.user1[1].length >= 3 && newObj.object.user2[1].length >= 3) {
+        var user1Choice = newObj.object.user1[1];
+        var user2Choice = newObj.object.user2[1];
+        if (user1Choice === user2Choice && user1Choice === "rock") {
+            $(".choice").html(rockImg);
+            $(".who-wins").text(responseArray[0])
+            setTimeout(restartGame, 5000)
+        } else if (user1Choice === user2Choice && user1Choice === "paper") {
+            $(".choice").html(paperImg);
+            $(".who-wins").text(responseArray[0])
+        } else if (user1Choice === user2Choice && user1Choice === "scissors") {
+            $(".choice").html(scissorsImg);
+            $(".who-wins").text(responseArray[0])
+        } else if (user1Choice === "rock" && user2Choice === "scissors") {
+            $("#user1-choice").html(rockImg);
+            $("#user2-choice").html(scissorsImg);
+            $(".who-wins").text(responseArray[2])
+        } else if (user1Choice === "rock" && user2Choice === "paper") {
+            $("#user1-choice").html(rockImg);
+            $("#user2-choice").html(paperImg);
+            $(".who-wins").text(responseArray[4])
+        } else if (user1Choice === "scissors" && user2Choice === "rock") {
+            $("#user1-choice").html(scissorsImg);
+            $("#user2-choice").html(rockImg);
+            $(".who-wins").text(responseArray[5])
+        } else if (user1Choice === "scissors" && user2Choice === "paper") {
+            $("#user1-choice").html(scissorsImg);
+            $("#user2-choice").html(paperImg);
+            $(".who-wins").text(responseArray[1])
+        } else if (user1Choice === "paper" && user2Choice === "rock") {
+            $("#user1-choice").html(paperImg);
+            $("#user2-choice").html(rockImg);
+            $(".who-wins").text(responseArray[3])
+        } else if (user1Choice === "paper" && user2Choice === "scissors") {
+            $("#user1-choice").html(paperImg);
+            $("#user2-choice").html(scissorsImg);
+            $(".who-wins").text(responseArray[6])
+        }
+    } else if (newObj.object.user1[1].length >= 3) {
+        $("#user1-choice").text("Ready");
+    } else if (newObj.object.user2[1].length >= 3) {
+        $("#user2-choice").text("Ready");
     }
 
 
     // clickCounter = snapshot.val().clickCount;
-
     // $("#click-value").text(snapshot.val().clickCount);
 }, function (errorObject) {
     console.log("The read failed: " + errorObject.code);
@@ -98,4 +152,22 @@ database.ref().on("value", function (snapshot) {
 
 function startGame() {
     alert("Both users have logged in, commence the battling by choosing your weapon of choice.")
+    $("#user1-choice").html("");
+    $("#user2-choice").html("");
+    var hasPicked = 0;
+    $(".rps").on("click", function (event) {
+        var shortHand = event.currentTarget.id.split("-");
+
+        if (shortHand[1] === "1") {
+            userObject.user1[1] = shortHand[0];
+            database.ref().set({
+                object: userObject
+            });
+        } else if (shortHand[1] === "2") {
+            userObject.user2[1] = shortHand[0];
+            database.ref().set({
+                object: userObject
+            });
+        }
+    })
 }

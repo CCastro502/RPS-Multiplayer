@@ -47,9 +47,9 @@
                 <img src="assets/images/squirrel.jpg" width="200px" height="200px">
             </div>
             <div class="col-md-6" id="decision-holder">
-                <h1 class="user-choice">Rock</h1>
+                <h1 class="choice" id="user1-choice">Rock</h1>
                 <h2 class="who-wins">x</h2>
-                <h1 class="choice">Scissors</h1>
+                <h1 class="choice" id="user2-choice">Scissors</h1>
             </div>
             <div class="col-md-2" id="user2-img">
                 <img src="assets/images/bird.jpg" width="200px" height="200px">
@@ -57,17 +57,17 @@
         </div>
         <div class="row">
             <div class="col-md-2 button-display">
-                <button class="btn rps" id="rock">Rock</button>
-                <button class="btn rps separate" id="paper">Paper</button>
-                <button class="btn rps" id="scissors">Scissors</button>
+                <button class="btn rps rock" id="rock-1">Rock</button>
+                <button class="btn rps paper separate" id="paper-1">Paper</button>
+                <button class="btn rps scissors" id="scissors-1">Scissors</button>
             </div>
             <div class="col-md-6">
-                <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="Trash talk text">
+                <input type="text" readonly class="form-control-plaintext" id="chat-val" value="Trash talk text">
             </div>
             <div class="col-md-2 button-display">
-                <button class="btn rps" id="rock">Rock</button>
-                <button class="btn rps separate" id="paper">Paper</button>
-                <button class="btn rps" id="scissors">Scissors</button>
+                <button class="btn rps rock" id="rock-2">Rock</button>
+                <button class="btn rps paper separate" id="paper-2">Paper</button>
+                <button class="btn rps scissors" id="scissors-2">Scissors</button>
             </div>
         </div>
         <div class="row">
@@ -80,7 +80,7 @@
             <div class="col-md-6">
                 <label for="exampleFormControlTextarea1" class="chat">Chat here:</label>
                 <button class="btn chat" id="send-chat">Send Chat</button>
-                <textarea class="form-control chat" id="exampleFormControlTextarea1" rows="3"></textarea>
+                <textarea class="form-control chat" id="text-area" rows="3"></textarea>
             </div>
             <div class="col-md-2" id="wins-loss-tracker2">
                 <p>Wins: </p>
