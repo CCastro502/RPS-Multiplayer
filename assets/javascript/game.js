@@ -24,7 +24,8 @@ var emptyObject = {
     user1Loss: 0,
     user2Loss: 0,
     count: 0,
-    count2: 0
+    count2: 0,
+    chat: ""
 }
 
 var userObject = {
@@ -35,7 +36,8 @@ var userObject = {
     user1Loss: 0,
     user2Loss: 0,
     count: 0,
-    count2: 0
+    count2: 0,
+    chat: ""
 }
 // Create shorthand to accessing FB DB
 var database = firebase.database();
@@ -51,7 +53,11 @@ resetValues();
 // Here will be a (series of) function(s) dedicated to taking the users username, storing it in firebase, then displaying, from firebase, that username on the page
 
 $("#send-chat").on("click", function () {
-    $("#chat-val").attr("value", $("#text-area").val())
+    userObject.chat = $("#text-area").val()
+    database.ref().set({
+        object: userObject
+    })
+    $("#text-area").val("")
 })
 
 $("#username1").on("click", function () {
@@ -80,11 +86,12 @@ database.ref().on("value", function (snapshot) {
     var newObj = snapshot.val();
     userObject.count2++;
     console.log(newObj.object.count2);
+    $("#chat-val").attr("value", newObj.object.chat);
     $("#user1-wins-updater").text(newObj.object.user1Win);
     $("#user2-wins-updater").text(newObj.object.user2Win);
     $("#user1-losses-updater").text(newObj.object.user1Loss);
     $("#user2-losses-updater").text(newObj.object.user2Loss);
-    // Signs in. Limits the startGame function starting everytime the data structure is updated
+    // Signs in. Limits the startGame function starting everytime the database structure is updated
     if (newObj.object.user1[0].length >= 3 && newObj.object.user2[0].length >= 3 && newObj.object.count2 <= 2) {
         $("#user-sign-in1").html("<h1 class='username'>" + newObj.object.user1[0] + "</html>")
         $("#user-sign-in2").html("<h1 class='username'>" + newObj.object.user2[0] + "</html>")
