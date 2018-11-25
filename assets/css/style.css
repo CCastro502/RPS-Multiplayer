@@ -98,17 +98,14 @@ body {
     font-family: 'Indie Flower', cursive;
     font-size: 21px;
     display:flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: flex-end;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 #wins-loss-tracker2 {
     font-family: 'Indie Flower', cursive;
     font-size: 21px;
     display:flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: flex-start;
-    margin-left: 35px;
+    flex-direction: row;
+    justify-content: space-between;
 }

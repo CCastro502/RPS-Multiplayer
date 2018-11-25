@@ -19,24 +19,22 @@ var responseArray = ["Ties with", "Cut Up", "Smashed", "Suffocated", "Is Suffoca
 var emptyObject = {
     user1: ["", ""],
     user2: ["", ""],
-    user1Tie: 0,
-    user2Tie: 0,
     user1Win: 0,
     user2Win: 0,
     user1Loss: 0,
     user2Loss: 0,
+    count: 0,
     count2: 0
 }
 
 var userObject = {
     user1: ["", ""],
     user2: ["", ""],
-    user1Tie: 0,
-    user2Tie: 0,
     user1Win: 0,
     user2Win: 0,
     user1Loss: 0,
     user2Loss: 0,
+    count: 0,
     count2: 0
 }
 // Create shorthand to accessing FB DB
@@ -82,6 +80,10 @@ database.ref().on("value", function (snapshot) {
     var newObj = snapshot.val();
     userObject.count2++;
     console.log(newObj.object.count2);
+    $("#user1-wins-updater").text(newObj.object.user1Win);
+    $("#user2-wins-updater").text(newObj.object.user2Win);
+    $("#user1-losses-updater").text(newObj.object.user1Loss);
+    $("#user2-losses-updater").text(newObj.object.user2Loss);
     // Signs in. Limits the startGame function starting everytime the data structure is updated
     if (newObj.object.user1[0].length >= 3 && newObj.object.user2[0].length >= 3 && newObj.object.count2 <= 2) {
         $("#user-sign-in1").html("<h1 class='username'>" + newObj.object.user1[0] + "</html>")
@@ -94,63 +96,16 @@ database.ref().on("value", function (snapshot) {
     }
     // Displays user-choice
     if (newObj.object.user1[1].length >= 3 && newObj.object.user2[1].length >= 3) {
-        var user1Choice = newObj.object.user1[1];
-        var user2Choice = newObj.object.user2[1];
-        if (user1Choice === user2Choice && user1Choice === "rock") {
-            $(".choice").html(rockImg);
-            $(".who-wins").text(responseArray[0])
-            setTimeout(restartGame, 5000);
-            userObject.user1Tie++;
-            userObject.user2Tie++;  
-            console.log(userObject);
-        } else if (user1Choice === user2Choice && user1Choice === "paper") {
-            $(".choice").html(paperImg);
-            $(".who-wins").text(responseArray[0])
-            setTimeout(restartGame, 5000);
-            user1Tie++;
-            user2Tie++;
-        } else if (user1Choice === user2Choice && user1Choice === "scissors") {
-            $(".choice").html(scissorsImg);
-            $(".who-wins").text(responseArray[0])
-            setTimeout(restartGame, 5000);
-            user1Tie++;
-            user2Tie++;
-        } else if (user1Choice === "rock" && user2Choice === "scissors") {
-            $("#user1-choice").html(rockImg);
-            $("#user2-choice").html(scissorsImg);
-            $(".who-wins").text(responseArray[2])
-            setTimeout(restartGame, 5000);
-        } else if (user1Choice === "rock" && user2Choice === "paper") {
-            $("#user1-choice").html(rockImg);
-            $("#user2-choice").html(paperImg);
-            $(".who-wins").text(responseArray[4])
-            setTimeout(restartGame, 5000);
-        } else if (user1Choice === "scissors" && user2Choice === "rock") {
-            $("#user1-choice").html(scissorsImg);
-            $("#user2-choice").html(rockImg);
-            $(".who-wins").text(responseArray[5])
-            setTimeout(restartGame, 5000);
-        } else if (user1Choice === "scissors" && user2Choice === "paper") {
-            $("#user1-choice").html(scissorsImg);
-            $("#user2-choice").html(paperImg);
-            $(".who-wins").text(responseArray[1])
-            setTimeout(restartGame, 5000);
-        } else if (user1Choice === "paper" && user2Choice === "rock") {
-            $("#user1-choice").html(paperImg);
-            $("#user2-choice").html(rockImg);
-            $(".who-wins").text(responseArray[3])
-            setTimeout(restartGame, 5000);
-        } else if (user1Choice === "paper" && user2Choice === "scissors") {
-            $("#user1-choice").html(paperImg);
-            $("#user2-choice").html(scissorsImg);
-            $(".who-wins").text(responseArray[6])
-            setTimeout(restartGame, 5000);
-        }
+        checkGame(newObj.object.user1[1], newObj.object.user2[1])
     } else if (newObj.object.user1[1].length >= 3) {
         $("#user1-choice").text("Ready");
     } else if (newObj.object.user2[1].length >= 3) {
         $("#user2-choice").text("Ready");
     }
+    $("#user1-wins-updater").text(newObj.object.user1Win)
+    $("#user1-losses-updater").text(newObj.object.user1Loss)
+    $("#user2-wins-updater").text(newObj.object.user2Win)
+    $("#user2-losses-updater").text(newObj.object.user2Loss)
 }, function (errorObject) {
     console.log("The read failed: " + errorObject.code);
 });
@@ -177,7 +132,86 @@ function startGame() {
     })
 }
 
+function checkGame(choice1, choice2) {
+    userObject.count++;
+    console.log(choice1, choice2);
+    if (choice1 === choice2 && choice1 === "rock" && userObject.count === 1) {
+        $(".choice").html(rockImg);
+        $(".who-wins").text(responseArray[0]);
+        setTimeout(restartGame, 3500);
+    } else if (choice1 === choice2 && choice1 === "scissors" && userObject.count === 1) {
+        $(".choice").html(scissorsImg);
+        $(".who-wins").text(responseArray[0]);
+        setTimeout(restartGame, 3500);
+    } else if (choice1 === choice2 && choice1 === "paper" && userObject.count === 1) {
+        $(".choice").html(paperImg);
+        $(".who-wins").text(responseArray[0]);
+        setTimeout(restartGame, 3500);
+    } else if (choice1 === "rock" && choice2 === "paper" && userObject.count === 1) {
+        userObject.user2Win++;
+        userObject.user1Loss++;
+        database.ref().set({
+            object: userObject
+        })
+        $("#user1-choice").html(rockImg);
+        $("#user2-choice").html(paperImg);
+        $(".who-wins").text(responseArray[4]);
+        setTimeout(restartGame, 3500);
+    } else if (choice1 === "rock" && choice2 === "scissors" && userObject.count === 1) {
+        userObject.user1Win++;
+        userObject.user2Loss++;
+        database.ref().set({
+            object: userObject
+        })
+        $("#user1-choice").html(rockImg);
+        $("#user2-choice").html(scissorsImg);
+        $(".who-wins").text(responseArray[2]);
+        setTimeout(restartGame, 3500);
+    } else if (choice1 === "paper" && choice2 === "rock" && userObject.count === 1) {
+        userObject.user1Win++;
+        userObject.user2Loss++;
+        database.ref().set({
+            object: userObject
+        })
+        $("#user1-choice").html(paperImg);
+        $("#user2-choice").html(rockImg);
+        $(".who-wins").text(responseArray[3]);
+        setTimeout(restartGame, 3500);
+    } else if (choice1 === "paper" && choice2 === "scissors" && userObject.count === 1) {
+        userObject.user2Win++;
+        userObject.user1Loss++;
+        database.ref().set({
+            object: userObject
+        })
+        $("#user1-choice").html(paperImg);
+        $("#user2-choice").html(scissorsImg);
+        $(".who-wins").text(responseArray[6]);
+        setTimeout(restartGame, 3500);
+    } else if (choice1 === "scissors" && choice2 === "rock" && userObject.count === 1) {
+        userObject.user2Win++;
+        userObject.user1Loss++;
+        database.ref().set({
+            object: userObject
+        })
+        $("#user1-choice").html(scissorsImg);
+        $("#user2-choice").html(rockImg);
+        $(".who-wins").text(responseArray[5]);
+        setTimeout(restartGame, 3500);
+    } else if (choice1 === "scissors" && choice2 === "paper" && userObject.count === 1) {
+        userObject.user1Win++;
+        userObject.user2Loss++;
+        database.ref().set({
+            object: userObject
+        })
+        $("#user1-choice").html(scissorsImg);
+        $("#user2-choice").html(paperImg);
+        $(".who-wins").text(responseArray[1]);
+        setTimeout(restartGame, 3500);
+    }
+}
+
 function restartGame() {
+    userObject.count = 0;
     userObject.user1[1] = "";
     userObject.user2[1] = "";
     $("#user1-choice").html("");
