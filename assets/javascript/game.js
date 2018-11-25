@@ -111,7 +111,6 @@ database.ref().on("value", function (snapshot) {
 });
 
 function startGame() {
-    alert("Both users have logged in, commence the battling by choosing your weapon of choice.")
     $("#user1-choice").html("");
     $("#user2-choice").html("");
     var hasPicked = 0;
