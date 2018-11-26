@@ -41,17 +41,16 @@ var userObject = {
 }
 // Create shorthand to accessing FB DB
 var database = firebase.database();
+// Resets database values when page refreshed
 function resetValues() {
     database.ref().set({
-        object: emptyObject
+        object: userObject
     });
 }
 
 resetValues();
-// Global variables
 
-// Here will be a (series of) function(s) dedicated to taking the users username, storing it in firebase, then displaying, from firebase, that username on the page
-
+// Updates chat
 $("#send-chat").on("click", function () {
     userObject.chat = $("#text-area").val()
     database.ref().set({
@@ -60,6 +59,7 @@ $("#send-chat").on("click", function () {
     $("#text-area").val("")
 })
 
+// Signs the first user into the page & database
 $("#username1").on("click", function () {
     if ($("#sign-in1").val().length >= 3) {
         userObject.user1[0] = $("#sign-in1").val();
@@ -71,6 +71,7 @@ $("#username1").on("click", function () {
     }
 })
 
+// Signs the second user into the page & database
 $("#username2").on("click", function () {
     if ($("#sign-in2").val().length >= 3) {
         userObject.user2[0] = $("#sign-in2").val();
@@ -82,16 +83,18 @@ $("#username2").on("click", function () {
     }
 })
 
+// Regurgitates database values onto page
 database.ref().on("value", function (snapshot) {
     var newObj = snapshot.val();
     userObject.count2++;
-    console.log(newObj.object.count2);
-    $("#chat-val").attr("value", newObj.object.chat);
     $("#user1-wins-updater").text(newObj.object.user1Win);
     $("#user2-wins-updater").text(newObj.object.user2Win);
     $("#user1-losses-updater").text(newObj.object.user1Loss);
     $("#user2-losses-updater").text(newObj.object.user2Loss);
-    // Signs in. Limits the startGame function starting everytime the database structure is updated
+
+    $("#chat-val").attr("value", newObj.object.chat);
+
+    // Signs in. Count2 limits the startGame function starting everytime the database structure is updated
     if (newObj.object.user1[0].length >= 3 && newObj.object.user2[0].length >= 3 && newObj.object.count2 <= 2) {
         $("#user-sign-in1").html("<h1 class='username'>" + newObj.object.user1[0] + "</html>")
         $("#user-sign-in2").html("<h1 class='username'>" + newObj.object.user2[0] + "</html>")
@@ -109,18 +112,19 @@ database.ref().on("value", function (snapshot) {
     } else if (newObj.object.user2[1].length >= 3) {
         $("#user2-choice").text("Ready");
     }
-    $("#user1-wins-updater").text(newObj.object.user1Win)
-    $("#user1-losses-updater").text(newObj.object.user1Loss)
-    $("#user2-wins-updater").text(newObj.object.user2Win)
-    $("#user2-losses-updater").text(newObj.object.user2Loss)
+    // Updates whether each user won or lost according to database saved values
+    $("#user1-wins-updater").text(newObj.object.user1Win);
+    $("#user2-wins-updater").text(newObj.object.user2Win);
+    $("#user1-losses-updater").text(newObj.object.user1Loss);
+    $("#user2-losses-updater").text(newObj.object.user2Loss);
 }, function (errorObject) {
     console.log("The read failed: " + errorObject.code);
 });
 
+// Sets up the page for the first game between 2 users
 function startGame() {
     $("#user1-choice").html("");
     $("#user2-choice").html("");
-    var hasPicked = 0;
     $(".rps").on("click", function (event) {
         var shortHand = event.currentTarget.id.split("-");
 
@@ -138,9 +142,9 @@ function startGame() {
     })
 }
 
+// Determines whether either user won or lost, sends results to database for it to update
 function checkGame(choice1, choice2) {
     userObject.count++;
-    console.log(choice1, choice2);
     if (choice1 === choice2 && choice1 === "rock" && userObject.count === 1) {
         $(".choice").html(rockImg);
         $(".who-wins").text(responseArray[0]);
@@ -216,6 +220,7 @@ function checkGame(choice1, choice2) {
     }
 }
 
+// Resets the page for every game after the first match
 function restartGame() {
     userObject.count = 0;
     userObject.user1[1] = "";
@@ -223,7 +228,6 @@ function restartGame() {
     $("#user1-choice").html("");
     $("#user2-choice").html("");
     $(".who-wins").text("Choose next Weapon")
-    var hasPicked = 0;
     $(".rps").on("click", function (event) {
         var shortHand = event.currentTarget.id.split("-");
         if (shortHand[1] === "1") {
