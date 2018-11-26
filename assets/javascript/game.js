@@ -44,7 +44,7 @@ var database = firebase.database();
 // Resets database values when page refreshed
 function resetValues() {
     database.ref().set({
-        object: userObject
+        object: emptyObject
     });
 }
 
