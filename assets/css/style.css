@@ -46,7 +46,9 @@ body {
     font-size: 50px;
     font-family: 'Kaushan Script', cursive;
 }
-
+.who-wins {
+    font-family: 'Indie Flower', cursive;
+}
 #user1-img {
 }
 
