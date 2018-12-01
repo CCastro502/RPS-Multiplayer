@@ -17,8 +17,6 @@ var responseArray = ["Ties with", "Cut Up", "Smashed", "Suffocated", "Is Suffoca
 var count = 0;
 var count2 = 0;
 // Stores username and weapon choice
-
-
 var user1Object = {
     name: "",
     win: 0,
@@ -41,7 +39,21 @@ var userCompare = {
 }
 // Create shorthand to accessing FB DB
 var database = firebase.database();
-// Resets database values when page refreshed
+var connectionsRef = database.ref("/connections");
+var connectedRef = database.ref(".info/connected");
+
+connectionsRef.on("value", function (snap) {
+    console.log(snap.val());
+});
+
+connectedRef.on("value", function (snap) {
+    console.log(snap.val())
+    if (snap.val()) {
+        var con = connectionsRef.push(true);
+        con.onDisconnect().remove();
+    }
+});
+
 function resetValues() {
     database.ref("/chatDB").set({
         chat: chat
@@ -113,10 +125,10 @@ database.ref("/user1Object").on("value", function (snapshot) {
         }
     }
 
-    
+
 })
 
-database.ref("/user2Object").on("value", function(snapshot) {
+database.ref("/user2Object").on("value", function (snapshot) {
     var newObj = snapshot.val();
     $("#user2-wins-updater").text(newObj.user2Object.win);
     $("#user2-losses-updater").text(newObj.user2Object.loss)
