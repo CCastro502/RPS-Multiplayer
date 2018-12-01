@@ -50,6 +50,27 @@ connectedRef.on("value", function (snap) {
     console.log(snap.val())
     if (snap.val()) {
         var con = connectionsRef.push(true);
+        $("#username1").on("click", function () {
+            if ($("#sign-in1").val().length >= 3) {
+                user1Object.name = $("#sign-in1").val();
+                database.ref("/user1Object").set({
+                    user1Object: user1Object
+                });
+                connectionsRef.push($("#sign-in1").val())
+            } else {
+                alert("username must be 3 characters or longer")
+            }
+        })
+        $("#username2").on("click", function () {
+            if ($("#sign-in2").val().length >= 3) {
+                user2Object.name = $("#sign-in2").val();
+                database.ref("/user2Object").set({
+                    user2Object: user2Object
+                });
+            } else {
+                alert("username must be 3 characters or longer")
+            }
+        })
         con.onDisconnect().remove();
     }
 });
@@ -84,28 +105,28 @@ $("#send-chat").on("click", function () {
 })
 
 // Signs the first user into the page & database
-$("#username1").on("click", function () {
-    if ($("#sign-in1").val().length >= 3) {
-        user1Object.name = $("#sign-in1").val();
-        database.ref("/user1Object").set({
-            user1Object: user1Object
-        });
-    } else {
-        alert("username must be 3 characters or longer")
-    }
-})
+// $("#username1").on("click", function () {
+//     if ($("#sign-in1").val().length >= 3) {
+//         user1Object.name = $("#sign-in1").val();
+//         database.ref("/user1Object").set({
+//             user1Object: user1Object
+//         });
+//     } else {
+//         alert("username must be 3 characters or longer")
+//     }
+// })
 
 // Signs the second user into the page & database
-$("#username2").on("click", function () {
-    if ($("#sign-in2").val().length >= 3) {
-        user2Object.name = $("#sign-in2").val();
-        database.ref("/user2Object").set({
-            user2Object: user2Object
-        });
-    } else {
-        alert("username must be 3 characters or longer")
-    }
-})
+// $("#username2").on("click", function () {
+//     if ($("#sign-in2").val().length >= 3) {
+//         user2Object.name = $("#sign-in2").val();
+//         database.ref("/user2Object").set({
+//             user2Object: user2Object
+//         });
+//     } else {
+//         alert("username must be 3 characters or longer")
+//     }
+// })
 
 // Updates chat box
 database.ref("/chatDB").on("value", function (snapshot) {
